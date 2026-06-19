@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block title %}Model Evaluation & Comparison{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-lg-8">
+            <h1 class="display-5 mb-2">Model Evaluation & Comparison</h1>
+            <p class="text-muted">Compare the performance of all 9 regression, ensemble machine learning, and deep learning neural networks.</p>
+            <div class="bg-primary" style="width: 100px; height: 4px; border-radius: 2px;"></div>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+            <button id="btn-retrain" class="btn btn-premium">
+                <i class="bi bi-arrow-repeat me-2"></i>Retrain All Models
+            </button>
+        </div>
+    </div>
+
+    <!-- Live Training Logs Terminal Console (Always accessible when retraining) -->
+    <div id="training-section" class="row d-none mb-4 animate-pulse-slow">
+        <div class="col-12">
+            <div class="card-premium border-primary">
+                <div class="card-body-premium">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="text-primary mb-0"><i class="bi bi-cpu-fill me-2"></i>Model Retraining Console</h5>
+                        <div id="training-status-badge" class="badge bg-warning text-dark"><i class="bi bi-gear-wide-connected spinner-border spinner-border-sm border-0 me-2"></i>Training in progress...</div>
+                    </div>
+                    <div class="terminal-window">
+                        <div class="terminal-header">
+                            <div class="terminal-dot dot-red"></div>
+                            <div class="terminal-dot dot-yellow"></div>
+                            <div class="terminal-dot dot-green"></div>
+                            <span class="terminal-title">train_pipeline.log</span>
+                        </div>
+                        <div id="terminal-logs" class="terminal-body">
+                            Initializing training environment...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Models Not Trained Alert -->
+    <div id="not-trained-alert" class="alert alert-warning d-none" role="alert">
+        <h4 class="alert-heading"><i class="bi bi-exclamation-triangle-fill me-2"></i>Models Not Trained Yet</h4>
+        <p>No model checkpoints or performance metrics were found on disk. The evaluation dashboard is empty.</p>
+        <hr>
+        <p class="mb-0">Please click the <strong>"Retrain All Models"</strong> button above to run the dataset generation and model training pipeline. (Estimated time: 1-2 minutes).</p>
+    </div>
+
+    <div id="comparison-content" class="d-none">
+        <!-- Best Model Card Highlight -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card-premium p-4 text-white animate-pulse-slow" style="background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 70%, var(--secondary) 100%);">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 text-center text-md-start mb-3 mb-md-0">
+                            <i class="bi bi-trophy text-warning" style="font-size: 5rem;"></i>
+                        </div>
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <span class="badge bg-warning text-dark mb-2 font-weight-bold">BEST PERFORMING MODEL</span>
+                            <h2 class="text-white" id="best-model-name">-</h2>
+                            <p class="mb-0 text-white-50">This model achieved the highest R² Score and lowest RMSE, demonstrating superior performance in predicting AQI levels from pollutant inputs.</p>
+                        </div>
+                        <div class="col-md-4 text-center text-md-end border-md-start border-white-50 ps-md-4">
+                            <h6 class="text-uppercase text-white-50 mb-1">R² (R-Squared) Score</h6>
+                            <h1 class="display-3 font-weight-bold text-white mb-0" id="best-model-r2">-</h1>
+                            <span class="badge bg-success" id="best-model-rmse-badge">RMSE: -</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evaluation Charts Section -->
+        <div class="row g-4 mb-5">
+            <div class="col-lg-6">
+                <div class="card-premium h-100">
+                    <div class="card-header-premium">
+                        <h5><i class="bi bi-graph-up text-primary me-2"></i>R² Score Comparison (Higher is Better)</h5>
+                    </div>
+                    <div class="card-body-premium">
+                        <div style="height: 320px; position: relative;">
+                            <canvas id="chart-r2-compare"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="card-premium h-100">
+                    <div class="card-header-premium">
+                        <h5><i class="bi bi-graph-down text-primary me-2"></i>RMSE & MAE Error Comparison (Lower is Better)</h5>
+                    </div>
+                    <div class="card-body-premium">
+                        <div style="height: 320px; position: relative;">
+                            <canvas id="chart-error-compare"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ranking Table Dashboard -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card-premium">
+                    <div class="card-header-premium">
+                        <h5><i class="bi bi-list-ol text-primary me-2"></i>Model Performance Ranking Dashboard</h5>
+                    </div>
+                    <div class="card-body-premium">
+                        <p class="text-muted small">All 9 models trained on 80% chronological CPCB dataset and evaluated on the 20% holdout test set. Highlighted row indicates the best overall algorithm.</p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-premium mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>Model Name</th>
+                                        <th>Mean Absolute Error (MAE)</th>
+                                        <th>Mean Squared Error (MSE)</th>
+                                        <th>Root Mean Squared Error (RMSE)</th>
+                                        <th>R² (R-Squared) Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ranking-table-body">
+                                    <!-- Dynamic ranking rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initialize comparison page elements
+        loadComparisonData();
+    });
+</script>
+{% endblock %}

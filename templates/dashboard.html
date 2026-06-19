@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+
+{% block title %}EDA & Data Preprocessing Dashboard{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 mb-2">EDA & Preprocessing Dashboard</h1>
+            <p class="text-muted">Explore how raw data is cleaned and investigate statistical correlations and distribution trends across features.</p>
+            <div class="bg-primary" style="width: 100px; height: 4px; border-radius: 2px;"></div>
+        </div>
+    </div>
+
+    <!-- Models Not Trained Alert -->
+    <div id="not-trained-alert" class="alert alert-warning d-none" role="alert">
+        <h4 class="alert-heading"><i class="bi bi-exclamation-triangle-fill me-2"></i>Models Not Trained Yet</h4>
+        <p>The system has not generated the dataset or trained the models yet. Preprocessing stats and EDA visuals are unavailable.</p>
+        <hr>
+        <p class="mb-0">Go to the <a href="{{ url_for('comparison') }}" class="alert-link">Model Evaluation Page</a> to run the training pipeline first.</p>
+    </div>
+
+    <div id="dashboard-content" class="d-none">
+        <!-- Preprocessing Summary Section -->
+        <div class="row g-4 mb-5">
+            <div class="col-12">
+                <h3 class="mb-3 text-primary-dark"><i class="bi bi-braces-asterisk text-primary me-2"></i>Data Preprocessing Summary</h3>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card-premium p-3 text-center stat-card h-100">
+                    <h6 class="text-muted text-uppercase mb-2">Raw Records</h6>
+                    <h2 class="display-6 font-weight-bold text-primary" id="val-raw-rows">-</h2>
+                    <p class="small text-muted mb-0">Total loaded from sources</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-premium p-3 text-center stat-card h-100" style="border-left-color: var(--secondary);">
+                    <h6 class="text-muted text-uppercase mb-2">Cleaned Records</h6>
+                    <h2 class="display-6 font-weight-bold text-success" id="val-clean-rows">-</h2>
+                    <p class="small text-muted mb-0">Post duplicate & outlier removal</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-premium p-3 text-center stat-card h-100" style="border-left-color: var(--aqi-poor);">
+                    <h6 class="text-muted text-uppercase mb-2">Duplicates Removed</h6>
+                    <h2 class="display-6 font-weight-bold text-warning" id="val-duplicates">-</h2>
+                    <p class="small text-muted mb-0">Identical rows dropped</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-premium p-3 text-center stat-card h-100" style="border-left-color: var(--aqi-verypoor);">
+                    <h6 class="text-muted text-uppercase mb-2">Train / Test split</h6>
+                    <h2 class="fs-4 font-weight-bold text-dark mt-2" id="val-split">-</h2>
+                    <p class="small text-muted mb-0">80% / 20% chronological split</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preprocessing Table & Imputations -->
+        <div class="row g-4 mb-5">
+            <div class="col-lg-6">
+                <div class="card-premium h-100">
+                    <div class="card-header-premium">
+                        <h5><i class="bi bi-tools text-primary me-2"></i>Outliers Detected & Handled</h5>
+                    </div>
+                    <div class="card-body-premium">
+                        <p class="small text-muted">Outliers detected via Interquartile Range (IQR) method ($x < Q1 - 1.5 \times IQR$ or $x > Q3 + 1.5 \times IQR$) are replaced with city-specific medians during preprocessing.</p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-premium mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Pollutant</th>
+                                        <th>Outliers Found</th>
+                                        <th>Imputation Strategy</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="outlier-table-body">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="card-premium h-100">
+                    <div class="card-header-premium">
+                        <h5><i class="bi bi-patch-question text-primary me-2"></i>Missing Values (Median Imputation)</h5>
+                    </div>
+                    <div class="card-body-premium">
+                        <p class="small text-muted">Missing pollutant levels imputed dynamically using the median value of that specific pollutant grouped by city.</p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-premium mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Pollutant</th>
+                                        <th>Missing Count</th>
+                                        <th>Post Imputation</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="missing-table-body">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EDA Visualizations Section -->
+        <div class="row g-4">
+            <div class="col-12">
+                <h3 class="mb-3 text-primary-dark mt-4"><i class="bi bi-bar-chart-line text-primary me-2"></i>Exploratory Data Analysis (EDA)</h3>
+            </div>
+
+            <!-- AQI Distribution & Pollutant Distribution -->
+            <div class="col-lg-5">
+                <div class="card-premium h-100">
+                    <div class="card-header-premium">
+                        <h5><i class="bi bi-pie-chart text-primary me-2"></i>AQI Category Distribution</h5>
+                    </div>
+                    <div class="card-body-premium text-center">
+                        <div style="height: 280px; position: relative;">
+                            <canvas id="chart-aqi-dist"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-7">
+                <div class="card-premium h-100">
+                    <div class="card-header-premium">
+                        <h5><i class="bi bi-bar-chart text-primary me-2"></i>Average Pollutant Concentrations</h5>
+                    </div>
+                    <div class="card-body-premium">
+                        <div style="height: 280px; position: relative;">
+                            <canvas id="chart-pollutant-avgs"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PM2.5 and PM10 Trends -->
+            <div class="col-lg-12">
+                <div class="card-premium">
+                    <div class="card-header-premium">
+                        <h5><i class="bi bi-calendar-range text-primary me-2"></i>PM2.5 vs PM10 Monthly Average Trends (Delhi)</h5>
+                    </div>
+                    <div class="card-body-premium">
+                        <div style="height: 300px; position: relative;">
+                            <canvas id="chart-pm-trends"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time Series Graph -->
+            <div class="col-lg-12">
+                <div class="card-premium">
+                    <div class="card-header-premium">
+                        <h5><i class="bi bi-graph-up text-primary me-2"></i>AQI Hourly Time Series Graph (Delhi - Last 120 Hours)</h5>
+                    </div>
+                    <div class="card-body-premium">
+                        <div style="height: 300px; position: relative;">
+                            <canvas id="chart-aqi-time-series"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Correlation & Feature Importance -->
+            <div class="col-lg-6">
+                <div class="card-premium h-100">
+                    <div class="card-header-premium">
+                        <h5><i class="bi bi-grid-3x3 text-primary me-2"></i>Pollutant Correlation Heatmap (Correlation with AQI)</h5>
+                    </div>
+                    <div class="card-body-premium text-center">
+                        <p class="small text-muted text-start">Heatmap matrix illustrating the correlation between all 6 primary pollutants. Values close to 1 indicate strong positive relationship.</p>
+                        <div class="d-flex justify-content-center mt-3">
+                            <div id="correlation-heatmap-container" class="w-100 p-2" style="max-width: 450px;">
+                                <!-- Dynamic Correlation Grid -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="card-premium h-100">
+                    <div class="card-header-premium">
+                        <h5><i class="bi bi-filter-square text-primary me-2"></i>Feature Importance for AQI Prediction</h5>
+                    </div>
+                    <div class="card-body-premium">
+                        <p class="small text-muted">Feature importance scores derived from the Random Forest Regressor model indicating which pollutants influence AQI calculations most.</p>
+                        <div style="height: 280px; position: relative;">
+                            <canvas id="chart-feature-importance"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Load data on page load
+        loadDashboardData();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+
+{% block title %}Comparative AQI Prediction - Project Overview{% endblock %}
+
+{% block content %}
+<!-- Hero Header -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7 text-center text-lg-start">
+                <span class="badge bg-primary mb-3 px-3 py-2 fs-7 rounded-pill text-uppercase tracking-wider">Final Year Project Presentation</span>
+                <h1 class="hero-title">Comparative Analysis of Air Quality Prediction</h1>
+                <h4 class="text-secondary mb-4 font-weight-normal">Using Regression and Deep Learning Techniques</h4>
+                <p class="hero-subtitle">
+                    A comprehensive web-based analytical framework designed to collect, preprocess, model, evaluate, and forecast Air Quality Index (AQI) values using 9 distinct mathematical, statistical, and neural network algorithms.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center justify-content-lg-start gap-3">
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-premium btn-lg">
+                        <i class="bi bi-speedometer2 me-2"></i>View Dashboards
+                    </a>
+                    <a href="{{ url_for('comparison') }}" class="btn btn-premium-outline btn-lg">
+                        <i class="bi bi-cpu me-2"></i>Evaluate Models
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 mt-5 mt-lg-0 text-center animate-pulse-slow">
+                <div class="card-premium p-4 text-center border-primary shadow-sm bg-white" style="border-width: 2px;">
+                    <i class="bi bi-wind text-primary" style="font-size: 5rem;"></i>
+                    <h3 class="mt-3">CPCB AQI standard</h3>
+                    <p class="text-muted">Analyzing 6 primary pollutants (PM2.5, PM10, NO2, SO2, CO, O3) to determine health indices in major cities.</p>
+                    <div class="d-flex justify-content-center gap-2 mt-4">
+                        <span class="badge bg-success">Good</span>
+                        <span class="badge bg-warning text-dark">Moderate</span>
+                        <span class="badge bg-danger">Severe</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Project Overview and Objectives -->
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-5 text-center">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-6 mb-3">Project Objectives & Methodology</h2>
+                <div class="bg-primary mx-auto" style="width: 80px; height: 4px; border-radius: 2px;"></div>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card-premium h-100 p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary-light p-3 rounded-3 me-3">
+                            <i class="bi bi-database-fill-down text-primary fs-3"></i>
+                        </div>
+                        <h4 class="mb-0">1. Data Ingestion</h4>
+                    </div>
+                    <p class="text-muted">
+                        Automated compilation of continuous air quality records. Supports fallback options to maintain a seamless evaluation stream containing hourly levels of all critical pollutants.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-premium h-100 p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary-light p-3 rounded-3 me-3">
+                            <i class="bi bi-braces text-primary fs-3"></i>
+                        </div>
+                        <h4 class="mb-0">2. Preprocessing</h4>
+                    </div>
+                    <p class="text-muted">
+                        Execution of a cleaning pipeline involving duplicate removal, outlier elimination via IQR metrics, city-grouped median imputation, and scaling standardizations.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-premium h-100 p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary-light p-3 rounded-3 me-3">
+                            <i class="bi bi-bar-chart-steps text-primary fs-3"></i>
+                        </div>
+                        <h4 class="mb-0">3. Comparison</h4>
+                    </div>
+                    <p class="text-muted">
+                        Simultaneous training of 9 regression, ensemble, and deep neural network models. Results are logged and compared under equivalent metrics (MAE, MSE, RMSE, R²).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- System Architecture Flowchart -->
+<section class="py-5 bg-white border-top border-bottom">
+    <div class="container">
+        <div class="row mb-5 text-center">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-6 mb-3">System Architecture Pipeline</h2>
+                <div class="bg-primary mx-auto" style="width: 80px; height: 4px; border-radius: 2px;"></div>
+                <p class="text-muted mt-3">Visual layout of the backend processing structure and frontend interactivity.</p>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-xl-10">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center gap-4 text-center py-4 px-3 card-premium bg-light">
+                    
+                    <div class="p-3 bg-white border rounded shadow-sm flex-fill w-100" style="max-width: 250px;">
+                        <span class="badge bg-secondary mb-2">INPUT</span>
+                        <h5>Raw AQI Data</h5>
+                        <p class="small text-muted mb-0">Hourly CPCB data streams with duplicates & missing cells</p>
+                    </div>
+                    
+                    <i class="bi bi-arrow-right-circle-fill text-primary fs-3 d-none d-lg-block"></i>
+                    <i class="bi bi-arrow-down-circle-fill text-primary fs-3 d-block d-lg-none"></i>
+                    
+                    <div class="p-3 bg-white border rounded shadow-sm flex-fill w-100" style="max-width: 250px;">
+                        <span class="badge bg-primary mb-2">PROCESS</span>
+                        <h5>Cleaning Pipeline</h5>
+                        <p class="small text-muted mb-0">Median Imputation, Outlier Clipping, StandardScaler</p>
+                    </div>
+                    
+                    <i class="bi bi-arrow-right-circle-fill text-primary fs-3 d-none d-lg-block"></i>
+                    <i class="bi bi-arrow-down-circle-fill text-primary fs-3 d-block d-lg-none"></i>
+                    
+                    <div class="p-3 bg-white border rounded shadow-sm flex-fill w-100" style="max-width: 250px;">
+                        <span class="badge bg-info text-dark mb-2">ALGORITHMS</span>
+                        <h5>9 ML/DL Engines</h5>
+                        <p class="small text-muted mb-0">Linear to LSTM sequence networks</p>
+                    </div>
+                    
+                    <i class="bi bi-arrow-right-circle-fill text-primary fs-3 d-none d-lg-block"></i>
+                    <i class="bi bi-arrow-down-circle-fill text-primary fs-3 d-block d-lg-none"></i>
+                    
+                    <div class="p-3 bg-white border rounded shadow-sm flex-fill w-100" style="max-width: 250px;">
+                        <span class="badge bg-success mb-2">OUTPUT</span>
+                        <h5>Visual Dashboards</h5>
+                        <p class="small text-muted mb-0">Rankings, Sliders, Autoregressive Forecasts</p>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tech Stack -->
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-5 text-center">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-6 mb-3">Application Technology Stack</h2>
+                <div class="bg-primary mx-auto" style="width: 80px; height: 4px; border-radius: 2px;"></div>
+            </div>
+        </div>
+        
+        <div class="row g-4 text-center">
+            <div class="col-6 col-md-3">
+                <div class="card-premium p-4 h-100">
+                    <i class="bi bi-filetype-py text-primary mb-3" style="font-size: 3rem;"></i>
+                    <h5>Flask Backend</h5>
+                    <p class="small text-muted mb-0">Robust routing & custom prediction APIs</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card-premium p-4 h-100">
+                    <i class="bi bi-cpu text-primary mb-3" style="font-size: 3rem;"></i>
+                    <h5>Scikit-Learn</h5>
+                    <p class="small text-muted mb-0">Statistical & ensemble regression models</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card-premium p-4 h-100">
+                    <i class="bi bi-node-plus text-primary mb-3" style="font-size: 3rem;"></i>
+                    <h5>TensorFlow / Keras</h5>
+                    <p class="small text-muted mb-0">Deep learning ANN and time-series LSTM</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card-premium p-4 h-100">
+                    <i class="bi bi-graph-up-arrow text-primary mb-3" style="font-size: 3rem;"></i>
+                    <h5>Chart.js</h5>
+                    <p class="small text-muted mb-0">Dynamic interactive visual charts & heatmaps</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

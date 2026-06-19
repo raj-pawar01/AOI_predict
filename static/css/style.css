@@ -1,0 +1,645 @@
+/* Premium Glassmorphism Dark Theme for AQI Prediction Comparative Analysis */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --bg-base: #090D16;
+    --bg-surface: rgba(19, 26, 42, 0.55);
+    --bg-surface-solid: #121825;
+    --bg-surface-hover: rgba(30, 41, 67, 0.75);
+    
+    /* Neon Indigo and Emerald accents */
+    --primary: #5A52E5;
+    --primary-dark: #4338CA;
+    --primary-light: rgba(90, 82, 229, 0.15);
+    --primary-glow: rgba(90, 82, 229, 0.35);
+    
+    --secondary: #10B981;
+    --secondary-dark: #065F46;
+    --secondary-light: rgba(16, 185, 129, 0.15);
+    
+    --dark: #070A13;
+    --light: #F8FAFC;
+    --white: #FFFFFF;
+    
+    --text-main: #F1F5F9;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    
+    --border-color: rgba(255, 255, 255, 0.07);
+    --border-hover: rgba(255, 255, 255, 0.18);
+    
+    --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    --hover-shadow: 0 20px 40px rgba(90, 82, 229, 0.18);
+
+    /* AQI Category Colors (Vibrant Neon Variants for Dark Backgrounds) */
+    --aqi-good: #10B981;
+    --aqi-satisfactory: #34D399;
+    --aqi-moderate: #F59E0B;
+    --aqi-poor: #F97316;
+    --aqi-verypoor: #EF4444;
+    --aqi-severe: #991B1B;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-base);
+    background-image: 
+        radial-gradient(at 50% 0%, rgba(90, 82, 229, 0.16) 0px, transparent 55%),
+        radial-gradient(at 0% 100%, rgba(16, 185, 129, 0.04) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.04) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    letter-spacing: -0.1px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.5px;
+}
+
+.display-5 {
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #CBD5E1 50%, #94A3B8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1280px;
+    }
+}
+
+/* Glassmorphism Header */
+.navbar-custom {
+    background: rgba(9, 13, 22, 0.75) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    padding: 14px 0;
+}
+
+.navbar-custom .navbar-brand {
+    font-weight: 800;
+    color: var(--text-main) !important;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: -0.8px;
+}
+
+.navbar-custom .navbar-brand i {
+    color: var(--primary) !important;
+    filter: drop-shadow(0 0 8px var(--primary-glow));
+    animation: float 3s infinite ease-in-out;
+}
+
+.navbar-custom .navbar-brand span {
+    color: var(--primary);
+}
+
+.navbar-custom .nav-link {
+    color: var(--text-secondary) !important;
+    font-weight: 600;
+    padding: 10px 20px !important;
+    border-radius: 10px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.95rem;
+}
+
+.navbar-custom .nav-link:hover {
+    color: var(--text-main) !important;
+    background-color: rgba(255, 255, 255, 0.04);
+}
+
+.navbar-custom .nav-link.active {
+    color: #FFFFFF !important;
+    background-color: var(--primary);
+    box-shadow: 0 0 20px var(--primary-glow);
+}
+
+/* Hero Section */
+.hero-section {
+    background: transparent;
+    padding: 110px 0 90px 0;
+    position: relative;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.hero-title {
+    font-size: 3.8rem;
+    font-weight: 800;
+    line-height: 1.15;
+    background: linear-gradient(135deg, #FFFFFF 0%, #EEF2F6 40%, var(--primary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 25px;
+    letter-spacing: -2px;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    max-width: 660px;
+    margin-bottom: 40px;
+    line-height: 1.7;
+}
+
+/* Card Premium - Glassmorphism style */
+.card-premium {
+    background: var(--bg-surface);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+}
+
+.card-premium:hover {
+    transform: translateY(-6px);
+    border-color: var(--border-hover);
+    box-shadow: var(--hover-shadow);
+}
+
+.card-header-premium {
+    background-color: rgba(255, 255, 255, 0.015);
+    border-bottom: 1px solid var(--border-color);
+    padding: 24px 32px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+}
+
+.card-body-premium {
+    padding: 32px;
+}
+
+/* Stat Cards */
+.stat-card {
+    border-left: 5px solid var(--primary);
+    position: relative;
+}
+
+.stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(90, 82, 229, 0.05) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+/* Terminal Console */
+.terminal-window {
+    background-color: #060911;
+    color: #10B981;
+    font-family: 'Fira Code', 'Courier New', Courier, monospace;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.65);
+    overflow: hidden;
+    margin-top: 24px;
+}
+
+.terminal-header {
+    background-color: #0E1322;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.terminal-title {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-left: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.terminal-body {
+    padding: 20px;
+    height: 320px;
+    overflow-y: auto;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    text-align: left;
+}
+
+/* Sliders */
+.slider-container {
+    background: rgba(255, 255, 255, 0.015);
+    padding: 18px 24px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    margin-bottom: 24px;
+    transition: all 0.25s ease;
+}
+
+.slider-container:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.07);
+}
+
+.slider-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.slider-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.form-range {
+    height: 6px;
+    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.1);
+    outline: none;
+}
+
+.form-range::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 2px solid #FFFFFF;
+    box-shadow: 0 0 10px var(--primary-glow);
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.form-range::-webkit-slider-thumb:hover {
+    transform: scale(1.25);
+}
+
+/* AQI Gauge Display */
+.aqi-gauge-container {
+    position: relative;
+    width: 240px;
+    height: 240px;
+    margin: 20px auto;
+}
+
+.aqi-gauge-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.aqi-number {
+    font-size: 4.2rem;
+    font-weight: 800;
+    line-height: 0.9;
+    color: var(--text-main);
+    letter-spacing: -2px;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.15));
+}
+
+.aqi-label {
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-top: 8px;
+}
+
+/* Badges */
+.aqi-badge {
+    padding: 10px 26px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: inline-block;
+    color: #FFFFFF;
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.35);
+    letter-spacing: 0.5px;
+}
+
+.aqi-badge-good { background-color: var(--aqi-good) !important; }
+.aqi-badge-satisfactory { background-color: var(--aqi-satisfactory) !important; color: #070A13 !important; }
+.aqi-badge-moderate { background-color: var(--aqi-moderate) !important; color: #070A13 !important; }
+.aqi-badge-poor { background-color: var(--aqi-poor) !important; }
+.aqi-badge-verypoor { background-color: var(--aqi-verypoor) !important; }
+.aqi-badge-severe { background-color: var(--aqi-severe) !important; }
+
+.text-good { color: var(--aqi-good) !important; }
+.text-satisfactory { color: var(--aqi-satisfactory) !important; }
+.text-moderate { color: var(--aqi-moderate) !important; }
+.text-poor { color: var(--aqi-poor) !important; }
+.text-verypoor { color: var(--aqi-verypoor) !important; }
+.text-severe { color: var(--aqi-severe) !important; }
+
+/* Table Design */
+.table-premium {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    background: transparent;
+}
+
+.table-premium th {
+    background-color: rgba(255, 255, 255, 0.02);
+    color: var(--text-secondary);
+    font-weight: 600;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1.2px;
+}
+
+.table-premium td {
+    padding: 16px 20px;
+    background-color: rgba(255, 255, 255, 0.015);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-main);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.table-premium td:first-child {
+    border-left: 1px solid var(--border-color);
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.table-premium td:last-child {
+    border-right: 1px solid var(--border-color);
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.table-premium tbody tr:hover td {
+    background-color: rgba(255, 255, 255, 0.045);
+    border-color: rgba(255, 255, 255, 0.16);
+}
+
+.table-premium tr.highlight-best td {
+    background-color: rgba(16, 185, 129, 0.07);
+    border-color: rgba(16, 185, 129, 0.22);
+}
+
+.table-premium tr.highlight-best td:first-child {
+    border-left: 4px solid var(--secondary);
+}
+
+/* Buttons */
+.btn-premium {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: var(--white);
+    font-weight: 600;
+    padding: 12px 28px;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(90, 82, 229, 0.35);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    font-size: 0.95rem;
+}
+
+.btn-premium:hover {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(90, 82, 229, 0.5);
+}
+
+.btn-premium-outline {
+    background-color: transparent;
+    color: var(--text-main);
+    font-weight: 600;
+    padding: 11px 26px;
+    border-radius: 10px;
+    border: 2px solid var(--border-color);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    font-size: 0.95rem;
+}
+
+.btn-premium-outline:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+    border-color: var(--border-hover);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+/* Bootstrap Global Overrides for Dark Portal Vibe */
+.list-group-item {
+    background-color: rgba(255, 255, 255, 0.015) !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-color) !important;
+    padding: 18px 28px !important;
+    transition: all 0.2s ease;
+}
+
+.list-group-item:hover {
+    background-color: rgba(255, 255, 255, 0.035) !important;
+}
+
+.form-select, .form-control {
+    background-color: rgba(9, 13, 22, 0.6) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 10px;
+    padding: 12px 18px;
+    transition: all 0.2s ease;
+}
+
+.form-select:focus, .form-control:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 4px var(--primary-glow) !important;
+}
+
+.alert {
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.alert-warning {
+    background-color: rgba(245, 158, 11, 0.08) !important;
+    color: #FBBF24 !important;
+    border: 1px solid rgba(245, 158, 11, 0.18) !important;
+}
+
+.alert-info {
+    background-color: rgba(59, 130, 246, 0.08) !important;
+    color: #60A5FA !important;
+    border: 1px solid rgba(59, 130, 246, 0.18) !important;
+}
+
+.alert-danger {
+    background-color: rgba(239, 68, 68, 0.08) !important;
+    color: #F87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.18) !important;
+}
+
+.alert-success {
+    background-color: rgba(16, 185, 129, 0.08) !important;
+    color: #34D399 !important;
+    border: 1px solid rgba(16, 185, 129, 0.18) !important;
+}
+
+.alert-link {
+    color: inherit !important;
+    text-decoration: underline !important;
+    font-weight: 700;
+}
+
+.progress {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    border-radius: 12px;
+}
+
+.progress-bar {
+    background-color: var(--primary) !important;
+}
+
+/* Footer styling */
+.footer-custom {
+    background-color: #060911;
+    color: var(--text-secondary);
+    padding: 70px 0 50px 0;
+    margin-top: 110px;
+    border-top: 1px solid var(--border-color);
+}
+
+.footer-custom h5 {
+    color: var(--white);
+    font-weight: 700;
+    margin-bottom: 24px;
+    letter-spacing: -0.4px;
+}
+
+.footer-custom a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+.footer-custom a:hover {
+    color: var(--white);
+    padding-left: 3px;
+}
+
+/* Animation utilities */
+.animate-pulse-slow {
+    animation: pulse 3.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.015);
+        opacity: 0.96;
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+/* Premium Border Accents for Cards */
+.card-premium.border-success,
+.card-premium.border-info,
+.card-premium.border-warning,
+.card-premium.border-danger {
+    border-top: 1px solid var(--border-color) !important;
+    border-right: 1px solid var(--border-color) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+.card-premium.border-success {
+    border-left: 5px solid var(--aqi-good) !important;
+}
+
+.card-premium.border-info {
+    border-left: 5px solid var(--primary) !important;
+}
+
+.card-premium.border-warning {
+    border-left: 5px solid var(--aqi-moderate) !important;
+}
+
+.card-premium.border-danger {
+    border-left: 5px solid var(--aqi-verypoor) !important;
+}
+
+/* Bootstrap Global Utility Overrides for Dark Mode Contrast */
+.bg-white {
+    background-color: var(--bg-surface-solid) !important;
+}
+
+.bg-light {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+.border, .border-top, .border-bottom {
+    border-color: var(--border-color) !important;
+}
+
+.text-muted {
+    color: var(--text-secondary) !important;
+}
+
+.text-secondary {
+    color: var(--text-secondary) !important;
+}
+
+/* Ensure text inside yellow/green/light badges remains readable (dark text on light bg) */
+.text-dark,
+.badge.text-dark,
+.badge.bg-light.text-dark,
+.badge.bg-warning.text-dark,
+.aqi-badge-moderate,
+.aqi-badge-satisfactory {
+    color: #070A13 !important;
+    font-weight: 700 !important;
+}

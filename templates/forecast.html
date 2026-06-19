@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}LSTM Time-Series Forecasting{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-8">
+            <h1 class="display-5 mb-2">LSTM Time-Series Forecasting</h1>
+            <p class="text-muted">Generate future AQI projections based on deep learning sequence-to-sequence LSTM models trained on historical time series.</p>
+            <div class="bg-primary" style="width: 100px; height: 4px; border-radius: 2px;"></div>
+        </div>
+        <div class="col-md-4 mt-3 mt-md-0 text-md-end">
+            <!-- City selector -->
+            <label for="select-forecast-city" class="form-label small text-muted font-weight-bold" style="font-weight: 600;">SELECT CITY</label>
+            <select class="form-select border-primary" id="select-forecast-city" style="border-width: 2px;">
+                <option value="Delhi" selected>Delhi</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Bengaluru">Bengaluru</option>
+                <option value="Chennai">Chennai</option>
+                <option value="Kolkata">Kolkata</option>
+                <option value="Hyderabad">Hyderabad</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Models Not Trained Alert -->
+    <div id="not-trained-alert" class="alert alert-warning d-none" role="alert">
+        <h4 class="alert-heading"><i class="bi bi-exclamation-triangle-fill me-2"></i>Forecasting Model Not Found</h4>
+        <p>The time-series forecast cannot run because the LSTM forecasting model has not been trained.</p>
+        <hr>
+        <p class="mb-0">Please visit the <a href="{{ url_for('comparison') }}" class="alert-link">Model Evaluation Page</a> and click "Retrain All Models" to train the forecaster.</p>
+    </div>
+
+    <div id="forecast-content" class="d-none">
+        <!-- Forecast Cards -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card-premium p-4 text-center stat-card h-100 border-success">
+                    <span class="badge bg-success mb-2 px-3">SHORT RANGE</span>
+                    <h5 class="text-muted mb-2">Next 6 Hours Average</h5>
+                    <h2 class="display-5 font-weight-bold text-success" id="forecast-avg-6">-</h2>
+                    <span class="badge bg-light text-dark border" id="forecast-cat-6">Good</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-premium p-4 text-center stat-card h-100 border-warning" style="border-left-color: var(--secondary);">
+                    <span class="badge bg-secondary mb-2 px-3">MID RANGE</span>
+                    <h5 class="text-muted mb-2">Next 12 Hours Average</h5>
+                    <h2 class="display-5 font-weight-bold text-info" id="forecast-avg-12">-</h2>
+                    <span class="badge bg-light text-dark border" id="forecast-cat-12">Good</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-premium p-4 text-center stat-card h-100 border-danger" style="border-left-color: var(--aqi-poor);">
+                    <span class="badge bg-warning text-dark mb-2 px-3">EXTENDED RANGE</span>
+                    <h5 class="text-muted mb-2">Next 24 Hours Average</h5>
+                    <h2 class="display-5 font-weight-bold text-warning" id="forecast-avg-24">-</h2>
+                    <span class="badge bg-light text-dark border" id="forecast-cat-24">Good</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Forecasting Chart -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card-premium p-4 mb-4">
+                    <div class="card-header-premium text-start px-0 pt-0 pb-3">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                            <h5 class="mb-0"><i class="bi bi-graph-up text-primary me-2"></i>LSTM AQI Projections vs Historical Readings</h5>
+                            <span class="small text-muted">Solid line: actual readings | Dashed line: LSTM projections</span>
+                        </div>
+                    </div>
+                    <div class="card-body-premium px-0 pb-0">
+                        <div style="height: 380px; position: relative;">
+                            <canvas id="chart-aqi-forecast"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detail forecasting table -->
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card-premium">
+                    <div class="card-header-premium">
+                        <h5><i class="bi bi-table text-primary me-2"></i>Hour-by-Hour Forecast Matrix</h5>
+                    </div>
+                    <div class="card-body-premium">
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                            <table class="table table-hover table-premium mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Hour</th>
+                                        <th>Date & Time</th>
+                                        <th>Projected AQI</th>
+                                        <th>Risk Category</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="forecast-table-body">
+                                    <!-- Dynamic forecast rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        initForecastPage();
+    });
+</script>
+{% endblock %}

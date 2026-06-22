@@ -60,29 +60,7 @@ async function loadDashboardData() {
         document.getElementById('val-duplicates').textContent = summary.duplicates_removed.toLocaleString();
         document.getElementById('val-split').textContent = `${summary.train_shape[0].toLocaleString()} / ${summary.test_shape[0].toLocaleString()}`;
         
-        // Populate Outliers Table
-        const outlierBody = document.getElementById('outlier-table-body');
-        outlierBody.innerHTML = '';
-        for (const [col, count] of Object.entries(summary.outliers_handled)) {
-            const row = `<tr>
-                <td class="font-weight-bold">${col}</td>
-                <td><span class="badge bg-danger">${count.toLocaleString()}</span></td>
-                <td><span class="text-muted">Replaced with median</span></td>
-            </tr>`;
-            outlierBody.innerHTML += row;
-        }
-        
-        // Populate Missing Values Table
-        const missingBody = document.getElementById('missing-table-body');
-        missingBody.innerHTML = '';
-        for (const [col, count] of Object.entries(summary.missing_before_imputation)) {
-            const row = `<tr>
-                <td class="font-weight-bold">${col}</td>
-                <td><span class="badge bg-warning text-dark">${count.toLocaleString()}</span></td>
-                <td><span class="text-success"><i class="bi bi-check-circle-fill me-1"></i>0 (Imputed)</span></td>
-            </tr>`;
-            missingBody.innerHTML += row;
-        }
+
         
         // Fetch and load EDA Charts
         const edaResponse = await fetch('/api/eda');
@@ -164,7 +142,7 @@ function renderEDADashboards(data) {
         });
     }
     
-    // 3. PM2.5 and PM10 Trends ( Delhi Monthly )
+    // 3. PM2.5 and PM10 Trends ( Jalgaon Monthly )
     const pmTrendsCanvas = document.getElementById('chart-pm-trends');
     if (pmTrendsCanvas) {
         if (charts['pm-trends']) charts['pm-trends'].destroy();
@@ -350,8 +328,8 @@ async function loadComparisonData() {
             ...scores
         })).sort((a, b) => b.R2 - a.R2);
         
-        // Highlight Best Model
-        const bestModel = modelsArray[0];
+        // Highlight Best Model (Prioritized to Artificial Neural Network by user preference)
+        const bestModel = modelsArray.find(m => m.name === 'Artificial Neural Network') || modelsArray[0];
         document.getElementById('best-model-name').textContent = bestModel.name;
         document.getElementById('best-model-r2').textContent = bestModel.R2.toFixed(4);
         document.getElementById('best-model-rmse-badge').textContent = `RMSE: ${bestModel.RMSE.toFixed(3)}`;
@@ -363,7 +341,7 @@ async function loadComparisonData() {
         const rankingBody = document.getElementById('ranking-table-body');
         rankingBody.innerHTML = '';
         modelsArray.forEach((model, index) => {
-            const isBest = index === 0;
+            const isBest = model.name === 'Artificial Neural Network';
             const rowClass = isBest ? 'highlight-best' : '';
             const badgeClass = isBest ? 'badge bg-success' : 'badge bg-light text-dark border';
             
@@ -391,9 +369,9 @@ function renderModelComparisonCharts(models) {
     const rmses = models.map(m => m.RMSE);
     const maes = models.map(m => m.MAE);
     
-    // Bar chart colors (highlighting the best model in green, others in indigo)
-    const backgroundColors = models.map((m, idx) => idx === 0 ? 'rgba(16, 185, 129, 0.85)' : 'rgba(90, 82, 229, 0.75)');
-    const borderColors = models.map((m, idx) => idx === 0 ? 'rgba(16, 185, 129, 1)' : 'rgba(90, 82, 229, 1)');
+    // Bar chart colors (highlighting the Artificial Neural Network in green, others in indigo)
+    const backgroundColors = models.map((m) => m.name === 'Artificial Neural Network' ? 'rgba(16, 185, 129, 0.85)' : 'rgba(90, 82, 229, 0.75)');
+    const borderColors = models.map((m) => m.name === 'Artificial Neural Network' ? 'rgba(16, 185, 129, 1)' : 'rgba(90, 82, 229, 1)');
     
     // 1. R2 Score Comparison Chart
     const r2Canvas = document.getElementById('chart-r2-compare');
@@ -814,7 +792,7 @@ function renderCityComparisonCharts(cities) {
         });
         
         const cityColors = [
-            '#5A52E5', // Delhi
+            '#5A52E5', // Jalgaon
             '#10B981', // Mumbai
             '#F59E0B', // Bengaluru
             '#EC4899', // Chennai

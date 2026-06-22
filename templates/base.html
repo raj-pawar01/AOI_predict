@@ -35,10 +35,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto gap-1">
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" id="nav-home" href="{{ url_for('home') }}">Overview</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/dashboard' %}active{% endif %}" id="nav-dashboard" href="{{ url_for('dashboard') }}">EDA & Preprocessing</a>
+                        <a class="nav-link {% if request.path == '/' or request.path == '/dashboard' %}active{% endif %}" id="nav-dashboard" href="{{ url_for('home') }}">EDA & Preprocessing</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == '/comparison' %}active{% endif %}" id="nav-comparison" href="{{ url_for('comparison') }}">Model Evaluation</a>
@@ -63,35 +60,9 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer-custom">
+    <footer class="footer-custom py-3 text-center border-top">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-5 col-md-12 mb-4 mb-lg-0">
-                    <h5 class="text-uppercase"><i class="bi bi-wind text-white me-2"></i>AQI Predict & Compare</h5>
-                    <p class="text-muted">
-                        A final year research project analyzing and comparing the effectiveness of traditional regression, machine learning ensemble, and advanced deep learning sequence neural networks for Indian CPCB AQI forecasting.
-                    </p>
-                    <p class="mb-0 text-muted">&copy; 2026. Built with Flask, TensorFlow, scikit-learn & Chart.js.</p>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4 mb-md-0 offset-lg-1">
-                    <h5 class="text-uppercase">Stack Components</h5>
-                    <ul class="list-unstyled mb-0">
-                        <li><span class="text-muted">Python / Flask</span></li>
-                        <li><span class="text-muted">Scikit-Learn / TensorFlow</span></li>
-                        <li><span class="text-muted">Pandas / NumPy</span></li>
-                        <li><span class="text-muted">Chart.js / Bootstrap 5</span></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                    <h5 class="text-uppercase">Key Features</h5>
-                    <ul class="list-unstyled mb-0">
-                        <li><a href="{{ url_for('dashboard') }}">9 Model Comparison</a></li>
-                        <li><a href="{{ url_for('predict_page') }}">Real-Time AQI Estimation</a></li>
-                        <li><a href="{{ url_for('forecast_page') }}">LSTM 24h Forecasting</a></li>
-                        <li><a href="{{ url_for('city_comparison_page') }}">Multi-City Pollutants</a></li>
-                    </ul>
-                </div>
-            </div>
+            <p class="mb-0 text-muted">&copy; 2026 AQI Predict. All rights reserved.</p>
         </div>
     </footer>
 

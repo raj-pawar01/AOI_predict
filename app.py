@@ -4,13 +4,13 @@ import subprocess
 import threading
 import numpy as np
 import pandas as pd
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, redirect, url_for
 import joblib
 
 app = Flask(__name__)
 
 # Constants
-CITIES = ['Delhi', 'Mumbai', 'Bengaluru', 'Chennai', 'Kolkata', 'Hyderabad']
+CITIES = ['Jalgaon', 'Mumbai', 'Bengaluru', 'Chennai', 'Kolkata', 'Hyderabad']
 POLLUTANTS = ['PM2.5', 'PM10', 'NO2', 'SO2', 'CO', 'O3']
 
 # Global thread reference for retraining
@@ -100,11 +100,11 @@ def run_train_process():
 # Page Routes
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('dashboard.html')
 
 @app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html')
+    return redirect(url_for('home'))
 
 @app.route('/comparison')
 def comparison():
@@ -149,14 +149,14 @@ def api_eda():
         pollutants = ['PM2.5', 'PM10', 'NO2', 'SO2', 'CO', 'O3']
         pollutant_avgs = df[pollutants].mean().to_dict()
         
-        # 3. Monthly Trends of PM2.5 & PM10 (using Delhi as representative)
-        delhi_df = df[df['City'] == 'Delhi'].copy()
-        delhi_df['ParsedDate'] = pd.to_datetime(delhi_df['Timestamp'])
+        # 3. Monthly Trends of PM2.5 & PM10 (using Jalgaon as representative)
+        jalgaon_df = df[df['City'] == 'Jalgaon'].copy()
+        jalgaon_df['ParsedDate'] = pd.to_datetime(jalgaon_df['Timestamp'])
         # Group by Month-Year for trends
-        delhi_df['Month'] = delhi_df['ParsedDate'].dt.strftime('%b %Y')
+        jalgaon_df['Month'] = jalgaon_df['ParsedDate'].dt.strftime('%b %Y')
         # Sort values first to maintain timeline order
-        delhi_df = delhi_df.sort_values(by='ParsedDate')
-        monthly_trends = delhi_df.groupby('Month', sort=False)[['PM2.5', 'PM10', 'AQI']].mean().tail(12)
+        jalgaon_df = jalgaon_df.sort_values(by='ParsedDate')
+        monthly_trends = jalgaon_df.groupby('Month', sort=False)[['PM2.5', 'PM10', 'AQI']].mean().tail(12)
         
         trends_data = {
             "months": list(monthly_trends.index),
@@ -171,8 +171,8 @@ def api_eda():
         # Full correlation matrix for heatmap
         corr_matrix = df[pollutants].corr().values.tolist()
         
-        # 5. AQI Time Series (Delhi last 120 hours)
-        time_series_df = delhi_df.tail(120)
+        # 5. AQI Time Series (Jalgaon last 120 hours)
+        time_series_df = jalgaon_df.tail(120)
         ts_data = {
             "timestamps": time_series_df['Timestamp'].tolist(),
             "aqi": time_series_df['AQI'].tolist(),
@@ -244,7 +244,7 @@ def api_train_status():
 @app.route('/api/predict', methods=['POST'])
 def api_predict():
     data = request.get_json() or {}
-    model_name = data.get('model', 'Random Forest Regression')
+    model_name = data.get('model', 'Artificial Neural Network')
     
     # Extract inputs and parse to floats
     try:
@@ -340,7 +340,7 @@ def api_predict():
 
 @app.route('/api/forecast-data')
 def api_forecast_data():
-    city = request.args.get('city', 'Delhi')
+    city = request.args.get('city', 'Jalgaon')
     if city not in CITIES:
         return jsonify({"status": "error", "message": "Invalid city name."}), 400
         

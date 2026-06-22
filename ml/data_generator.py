@@ -114,7 +114,7 @@ def generate_city_data(city_name, base_levels, start_date, end_date):
             
         # Seasonal pattern (winter peak: Nov-Jan, monsoon low: Jul-Sep)
         if month in [11, 12, 1]: # Winter
-            seasonal_factor = 1.5 if city_name in ["Delhi", "Kolkata"] else 1.25
+            seasonal_factor = 1.5 if city_name in ["Jalgaon", "Kolkata"] else 1.25
         elif month in [7, 8, 9]: # Monsoon
             seasonal_factor = 0.5
         else:
@@ -165,7 +165,7 @@ def generate_full_dataset(output_path):
     
     # Establish characteristic pollutant profiles for each city
     city_profiles = {
-        'Delhi':     {'pm25': 98.0, 'pm10': 185.0, 'no2': 45.0, 'so2': 15.0, 'co': 1.80, 'o3': 38.0},
+        'Jalgaon':   {'pm25': 98.0, 'pm10': 185.0, 'no2': 45.0, 'so2': 15.0, 'co': 1.80, 'o3': 38.0},
         'Mumbai':    {'pm25': 48.0, 'pm10': 92.0,  'no2': 28.0, 'so2': 12.0, 'co': 0.95, 'o3': 28.0},
         'Bengaluru': {'pm25': 28.0, 'pm10': 55.0,  'no2': 18.0, 'so2': 8.0,  'co': 0.65, 'o3': 32.0},
         'Chennai':   {'pm25': 36.0, 'pm10': 68.0,  'no2': 15.0, 'so2': 9.0,  'co': 0.75, 'o3': 26.0},
